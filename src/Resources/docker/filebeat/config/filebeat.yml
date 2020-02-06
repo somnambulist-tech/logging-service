@@ -18,3 +18,8 @@ output.elasticsearch:
 
 #output.logstash:
 #  hosts: '${LOGSTASH_HOSTS:logstash:5044}'
+
+setup.kibana:
+  host: "kibana:5601"
+
+setup.dashboards.enabled: true

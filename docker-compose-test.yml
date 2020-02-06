@@ -20,6 +20,8 @@ services:
       # Use single node discovery in order to disable production mode and avoid bootstrap checks
       # see https://www.elastic.co/guide/en/elasticsearch/reference/current/bootstrap-checks.html
       discovery.type: single-node
+    labels:
+      traefik.enabled: "false"
     networks:
       - elk
 
@@ -36,6 +38,8 @@ services:
       LS_JAVA_OPTS: "-Xmx256m -Xms256m"
     networks:
       - elk
+    labels:
+      traefik.enabled: "false"
     depends_on:
       - elasticsearch
 
@@ -47,6 +51,9 @@ services:
         ELK_VERSION: $ELK_VERSION
     ports:
       - "5601:5601"
+    labels:
+      traefik.port: 5601
+      traefik.frontend.rule: "Host:kibana.example.dev"
     networks:
       - elk
     depends_on:
@@ -68,8 +75,12 @@ services:
         source: /var/run/docker.sock
         target: /var/run/docker.sock
         read_only: true
+    labels:
+      traefik.enabled: "false"
     networks:
       - elk
+    depends_on:
+      - kibana
 
   testLoggerAlpha:
     image: chentex/random-logger:latest
