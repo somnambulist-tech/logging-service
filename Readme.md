@@ -15,9 +15,7 @@ Once the services are started navigating to Dashboards ![dashboard icon](/docs/d
 
 ## Log tailing
 
-![Logs icon](/docs/logs_icon.png)
-
-The logs section provides a real-time stream of the incoming logs from all services. It can be filted to a specific docker service with the search: `docker.container.labels.com_docker_compose_service: "SERVICENAME"` 
+The logs section ![Logs icon](/docs/logs_icon.png) provides a real-time stream of the incoming logs from all services. It can be filted to a specific docker service with the search: `docker.container.labels.com_docker_compose_service: "SERVICENAME"` 
 
 ## Discovery 
 
