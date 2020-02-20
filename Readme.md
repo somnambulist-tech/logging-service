@@ -7,7 +7,7 @@ Copy the .env.dist to .env
 
 Replace the contents of `src/Resources/docker/filebeat/config/service_list` with a newline delimited list of the docker-compose service names you want dashboards for
 
-The project is pre-configured to capture all stdout and stderr from containers running on the same docker host. So ensure that any containers you want logs for are using stdout/err.
+The project is pre-configured to capture all stdout and stderr from containers running on the same docker host. So ensure that any containers you want logs for are using stdout/err. An example [monolog.yaml](/docs/monolog.yaml)
 
 If you are using Traefik the compose file has labels for kibana.example.dev
 

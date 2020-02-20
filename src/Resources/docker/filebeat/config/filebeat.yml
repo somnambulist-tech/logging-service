@@ -3,10 +3,16 @@ filebeat.config:
     path: ${path.config}/modules.d/*.yml
     reload.enabled: false
 
-filebeat.autodiscover:
-  providers:
-    - type: docker
-      hints.enabled: true
+# Uncomment to enable docker container autodiscovery and collection of stdout/stderr
+#filebeat.autodiscover:
+#  providers:
+#    - type: docker
+#      hints.enabled: true
+
+filebeat.inputs:
+- type: syslog
+  protocol.udp:
+    host: "localhost:9000"
 
 processors:
 - add_cloud_metadata: ~
@@ -23,9 +29,3 @@ output.elasticsearch:
 
 setup.kibana:
   host: "kibana:5601"
-
-#setup.dashboards.enabled: true
-
-#setup.template.enabled: true
-#setup.template.name: "filebeat"
-#setup.template.pattern: "filebeat-*"
