@@ -23,7 +23,7 @@ services:
     labels:
       traefik.enabled: "false"
     networks:
-      - elk
+      - app_network_backend
 
   logstash:
     build:
@@ -37,7 +37,7 @@ services:
     environment:
       LS_JAVA_OPTS: "-Xmx256m -Xms256m"
     networks:
-      - elk
+      - app_network_backend
     labels:
       traefik.enabled: "false"
     depends_on:
@@ -55,7 +55,7 @@ services:
       traefik.port: 5601
       traefik.frontend.rule: "Host:kibana.example.dev"
     networks:
-      - elk
+      - app_network_backend
     depends_on:
       - elasticsearch
 
@@ -80,13 +80,13 @@ services:
     labels:
       traefik.enabled: "false"
     networks:
-      - elk
+      - app_network_backend
     depends_on:
       - kibana
 
 networks:
-  elk:
-    driver: bridge
+  app_network_backend:
+    external: true
 
 volumes:
   elasticsearch:
