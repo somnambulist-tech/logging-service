@@ -3,7 +3,7 @@ version: '3.2'
 services:
   elasticsearch:
     build:
-      context: src/Resources/docker/elasticsearch
+      context: config/docker/elasticsearch
       dockerfile: Dockerfile
       args:
         ELK_VERSION: $ELK_VERSION
@@ -20,14 +20,12 @@ services:
       # Use single node discovery in order to disable production mode and avoid bootstrap checks
       # see https://www.elastic.co/guide/en/elasticsearch/reference/current/bootstrap-checks.html
       discovery.type: single-node
-    labels:
-      traefik.enabled: "false"
     networks:
       - app_network_backend
 
   logstash:
     build:
-      context: src/Resources/docker/logstash
+      context: config/docker/logstash
       dockerfile: Dockerfile
       args:
         ELK_VERSION: $ELK_VERSION
@@ -38,22 +36,22 @@ services:
       LS_JAVA_OPTS: "-Xmx256m -Xms256m"
     networks:
       - app_network_backend
-    labels:
-      traefik.enabled: "false"
     depends_on:
       - elasticsearch
 
   kibana:
     build:
-      context: src/Resources/docker/kibana
+      context: config/docker/kibana
       dockerfile: Dockerfile
       args:
         ELK_VERSION: $ELK_VERSION
     ports:
       - "5601:5601"
     labels:
-      traefik.port: 5601
-      traefik.frontend.rule: "Host:kibana.example.dev"
+      traefik.enable: true
+      traefik.http.routers.kibana.rule: "Host(`kibana.example.dev`)"
+      traefik.http.routers.kibana.tls: true
+      traefik.http.services.kibana.loadbalancer.server.port: 5601
     networks:
       - app_network_backend
     depends_on:
@@ -61,7 +59,7 @@ services:
 
   filebeat:
     build:
-      context: src/Resources/docker/filebeat
+      context: config/docker/filebeat
       dockerfile: Dockerfile
       args:
         ELK_VERSION: $ELK_VERSION
@@ -80,8 +78,6 @@ services:
       - type: volume
         source: filebeat
         target: /var/filebeat
-    labels:
-      traefik.enabled: "false"
     networks:
       - app_network_backend
     depends_on:
