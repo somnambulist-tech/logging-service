@@ -1,4 +1,4 @@
-version: '3.2'
+version: '3.5'
 
 services:
   elasticsearch:
@@ -21,7 +21,7 @@ services:
       # see https://www.elastic.co/guide/en/elasticsearch/reference/current/bootstrap-checks.html
       discovery.type: single-node
     networks:
-      - app_network_backend
+      - mycompany_network_backend
 
   logstash:
     build:
@@ -35,7 +35,7 @@ services:
     environment:
       LS_JAVA_OPTS: "-Xmx256m -Xms256m"
     networks:
-      - app_network_backend
+      - mycompany_network_backend
     depends_on:
       - elasticsearch
 
@@ -53,7 +53,7 @@ services:
       traefik.http.routers.kibana.tls: true
       traefik.http.services.kibana.loadbalancer.server.port: 5601
     networks:
-      - app_network_backend
+      - mycompany_network_backend
     depends_on:
       - elasticsearch
 
@@ -79,14 +79,16 @@ services:
         source: filebeat
         target: /var/filebeat
     networks:
-      - app_network_backend
+      - mycompany_network_backend
     depends_on:
       - kibana
 
 networks:
-  app_network_backend:
+  mycompany_network_backend:
     external: true
 
 volumes:
   elasticsearch:
+    name: mycompany_volumes_logging-elasticsearch
   filebeat:
+    name: mycompany_volumes_logging-filebeat
